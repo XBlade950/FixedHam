@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Bullet : MonoBehaviour {
+public class PlayerBullet : MonoBehaviour {
 
     public float speed = 1;
     private GameObject player;
+    public float bulletDistance = 50f;
 
 
 	// Use this for initialization
@@ -18,7 +19,7 @@ public class Bullet : MonoBehaviour {
 
         //deletes if bullet is very far away(off screen)
         Vector3 diff = transform.position - player.transform.position;
-        if(diff.magnitude > 100f)
+        if(diff.magnitude > bulletDistance)
             Destroy(gameObject);
 	}
 
@@ -30,8 +31,9 @@ public class Bullet : MonoBehaviour {
         if (obj.tag == "enemy"){
             obj.GetComponent<Enemy>().takeDamage();
         }
-
-        Destroy(gameObject);
-        
+        if (obj.tag != "Player")
+        {
+            Destroy(gameObject);
+        }
     }
 }
