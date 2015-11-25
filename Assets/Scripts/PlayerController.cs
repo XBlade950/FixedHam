@@ -11,11 +11,14 @@ public class PlayerController : MonoBehaviour {
     public float gravity = 20f;
     public GameObject bullet;
     private CharacterController controller;
+    public float jumpSpeed = 8f;
+
 
     public int speed;
 	// Use this for initialization
 	void Start () {
         cameraDif = Camera.main.transform.position.y - transform.position.y;
+        bullet = (GameObject)Resources.Load("PlayerStandardBullet");
         controller = GetComponent<CharacterController>();
 	}
 	
@@ -25,6 +28,8 @@ public class PlayerController : MonoBehaviour {
         worldPosition.y = transform.position.y;
         transform.LookAt(worldPosition);
 
+
+        //controller.
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Left Mouse Clicked");
@@ -34,6 +39,18 @@ public class PlayerController : MonoBehaviour {
 
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log("Right Mouse Clicked");
+            bullet = (GameObject)Resources.Load("PlayerOneShotBullet");
+            Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            Instantiate(bullet, toInstantiate + (transform.forward * 1f), transform.rotation);
+            bullet = (GameObject)Resources.Load("PlayerStandardBullet");
+
+
+        }
+
+        
         
 
         //Moves player with Character Controller
@@ -43,6 +60,12 @@ public class PlayerController : MonoBehaviour {
         {
             moveDirection = new Vector3(moveHorizontal, 0f, moveVertical);
             moveDirection *= speed; 
+        }
+
+        if (Input.GetKeyDown("space") && controller.isGrounded)
+        {
+            Debug.Log("Space Pressed");
+            moveDirection.y = jumpSpeed;
         }
 
         moveDirection.y -= gravity * Time.deltaTime;

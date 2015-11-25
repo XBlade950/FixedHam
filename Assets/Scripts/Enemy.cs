@@ -4,6 +4,7 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
     private int health;
+    private Vector3 toLook;
 
 	// Use this for initialization
 	void Start () {
@@ -12,6 +13,9 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        toLook = GameObject.FindGameObjectWithTag("Player").transform.position;
+        transform.LookAt(toLook);
+
         if (health <= 0)
         {
             Debug.Log("Enemy Defeated");
@@ -19,9 +23,9 @@ public class Enemy : MonoBehaviour {
         }
 	}
 
-    public void takeDamage()
+    public void takeDamage(int damage)
     {
-        health -= 20;
+        health -= damage;
 
     }
 }

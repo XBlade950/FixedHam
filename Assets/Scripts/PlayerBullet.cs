@@ -6,6 +6,7 @@ public class PlayerBullet : MonoBehaviour {
     public float speed = 1;
     private GameObject player;
     public float bulletDistance = 50f;
+    public int damage = 20;
 
 
 	// Use this for initialization
@@ -29,11 +30,13 @@ public class PlayerBullet : MonoBehaviour {
         
         Debug.Log("Bullet hit something");
         if (obj.tag == "enemy"){
-            obj.GetComponent<Enemy>().takeDamage();
+            obj.GetComponent<Enemy>().takeDamage(damage);
         }
         if (obj.tag != "Player")
         {
             Destroy(gameObject);
         }
     }
+
+    
 }
