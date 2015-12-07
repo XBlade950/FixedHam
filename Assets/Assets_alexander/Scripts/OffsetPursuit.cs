@@ -1,33 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour {
+public class OffsetPursuit : MonoBehaviour {
 
-    private int health;
     public GameObject player;
     public float speed;
     public float offset;
     public float startPos;
     private bool start;
-
-	// Use this for initialization
-	void Start () {
-        health = 100;
+    // Use this for initialization
+    void Start()
+    {
         player = GameObject.FindGameObjectWithTag("Player");
         player.GetComponent<Transform>();
         gameObject.GetComponent<Transform>();
         start = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
 
-        if (health <= 0)
-        {
-            Debug.Log("Enemy Defeated");
-            Destroy(gameObject);
-        }
-
+    // Update is called once per frame
+    void Update()
+    {
         gameObject.transform.position = new Vector3(gameObject.transform.position.x, player.transform.position.y, gameObject.transform.position.z);
         if (Vector3.Distance(player.transform.position, gameObject.transform.position) < startPos)
         {
@@ -54,12 +46,6 @@ public class Enemy : MonoBehaviour {
 
             transform.LookAt(player.transform);
         }
-
-	}
-
-    public void takeDamage(int damage)
-    {
-        health -= damage;
-
+        
     }
 }
