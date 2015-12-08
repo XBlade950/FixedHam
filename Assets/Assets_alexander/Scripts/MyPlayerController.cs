@@ -15,7 +15,11 @@ public class MyPlayerController : MonoBehaviour {
     public int OneShots = 4;
     private Animator animator;
     private Vector3 oldPos;
+    private Actions actions;
+    private PlayerController playControl;
+   // public RuntimeAnimatorController aniControl;
 
+    
     public int speed;
 	// Use this for initialization
 	void Start () {
@@ -23,8 +27,13 @@ public class MyPlayerController : MonoBehaviour {
         bullet = (GameObject)Resources.Load("PlayerStandardBullet");
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        
+        //animator.runtimeAnimatorController = aniControl;
+        playControl = GetComponent<PlayerController>();
+        actions = GetComponent<Actions>();
+        playControl.SetArsenal("Rifle");
 	}
+
+    
 	
 	// Update is called once per frame
 	void Update () {
@@ -39,6 +48,7 @@ public class MyPlayerController : MonoBehaviour {
             Debug.Log("Left Mouse Clicked");
             Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             Instantiate(bullet, toInstantiate + (transform.forward*1f), transform.rotation);
+            actions.Aiming();
             //animator.SetBool("Death", true);
             
 
@@ -74,8 +84,9 @@ public class MyPlayerController : MonoBehaviour {
         if (Input.GetKeyDown("space") && controller.isGrounded)
         {
             Debug.Log("Space Pressed");
-            animator.SetBool("Jump", true);
-            moveDirection.y = jumpSpeed;
+            actions.Jump();
+            //moveDirection.y = jumpSpeed;
+            
             
         }
         
@@ -84,25 +95,18 @@ public class MyPlayerController : MonoBehaviour {
 
         if (oldPos != gameObject.transform.position)
         {
-            //animator.SetFloat("Speed", 2f);
+            actions.Walk();
         }
         else
-            animator.SetFloat("Speed", 0.0f);
+            //actions.Stay();
+        
+            
 
         controller.Move(moveDirection*Time.deltaTime);
-        StartCoroutine(wait());
-        //oldPos = gameObject.transform.position;
+        //actions.Walk();
+        //StartCoroutine(wait());
+        oldPos = gameObject.transform.position;
 	}
 
-    IEnumerator wait()
-    {
-        yield return new WaitForSeconds(1);
-        oldPos = gameObject.transform.position;
-    }
-
-    void FixedUpdate()
-    {
-        //oldPos = gameObject.transform.position;
-        
-    }
+    
 }
