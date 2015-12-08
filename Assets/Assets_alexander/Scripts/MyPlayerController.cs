@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class MyPlayerController : MonoBehaviour {
     
 
     private Vector3 mousePosition;
@@ -12,7 +12,9 @@ public class PlayerController : MonoBehaviour {
     public GameObject bullet;
     private CharacterController controller;
     public float jumpSpeed = 8f;
-
+    public int OneShots = 4;
+    private Animator animator;
+    private Vector3 oldPos;
 
     public int speed;
 	// Use this for initialization
@@ -20,6 +22,8 @@ public class PlayerController : MonoBehaviour {
         cameraDif = Camera.main.transform.position.y - transform.position.y;
         bullet = (GameObject)Resources.Load("PlayerStandardBullet");
         controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+        
 	}
 	
 	// Update is called once per frame
@@ -29,12 +33,13 @@ public class PlayerController : MonoBehaviour {
         transform.LookAt(worldPosition);
 
 
-        //controller.
+        
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Left Mouse Clicked");
             Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             Instantiate(bullet, toInstantiate + (transform.forward*1f), transform.rotation);
+            //animator.SetBool("Death", true);
             
 
         }
@@ -42,10 +47,14 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetMouseButtonDown(1))
         {
             Debug.Log("Right Mouse Clicked");
-            bullet = (GameObject)Resources.Load("PlayerOneShotBullet");
-            Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            Instantiate(bullet, toInstantiate + (transform.forward * 1f), transform.rotation);
-            bullet = (GameObject)Resources.Load("PlayerStandardBullet");
+            if (OneShots > 0)
+            {
+                bullet = (GameObject)Resources.Load("PlayerOneShotBullet");
+                Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                Instantiate(bullet, toInstantiate + (transform.forward * 1f), transform.rotation);
+                bullet = (GameObject)Resources.Load("PlayerStandardBullet");
+                OneShots--;
+            }
 
 
         }
@@ -65,21 +74,35 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKeyDown("space") && controller.isGrounded)
         {
             Debug.Log("Space Pressed");
+            animator.SetBool("Jump", true);
             moveDirection.y = jumpSpeed;
+            
         }
+        
 
         moveDirection.y -= gravity * Time.deltaTime;
+
+        if (oldPos != gameObject.transform.position)
+        {
+            //animator.SetFloat("Speed", 2f);
+        }
+        else
+            animator.SetFloat("Speed", 0.0f);
+
         controller.Move(moveDirection*Time.deltaTime);
-        
+        StartCoroutine(wait());
+        //oldPos = gameObject.transform.position;
 	}
 
-    /*void FixedUpdate()
+    IEnumerator wait()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        yield return new WaitForSeconds(1);
+        oldPos = gameObject.transform.position;
+    }
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        GetComponent<Rigidbody>().velocity = movement * speed;
+    void FixedUpdate()
+    {
+        //oldPos = gameObject.transform.position;
         
-    }*/
+    }
 }
