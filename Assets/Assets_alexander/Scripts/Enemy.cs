@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour {
             Destroy(gameObject);
         }
 
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x, player.transform.position.y, gameObject.transform.position.z);
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, player.transform.position.y+.5f, gameObject.transform.position.z);
         if (Vector3.Distance(player.transform.position, gameObject.transform.position) < startPos)
         {
             start = true;

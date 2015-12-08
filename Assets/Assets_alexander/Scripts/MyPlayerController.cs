@@ -46,7 +46,7 @@ public class MyPlayerController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Left Mouse Clicked");
-            Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y+.5f, transform.position.z);
             Instantiate(bullet, toInstantiate + (transform.forward*1f), transform.rotation);
             actions.Aiming();
             //animator.SetBool("Death", true);
@@ -60,8 +60,8 @@ public class MyPlayerController : MonoBehaviour {
             if (OneShots > 0)
             {
                 bullet = (GameObject)Resources.Load("PlayerOneShotBullet");
-                Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-                Instantiate(bullet, toInstantiate + (transform.forward * 1f), transform.rotation);
+                Vector3 toInstantiate = new Vector3(transform.position.x, transform.position.y+.5f, transform.position.z);
+                Instantiate(bullet, toInstantiate + (transform.forward * 1.5f), transform.rotation);
                 bullet = (GameObject)Resources.Load("PlayerStandardBullet");
                 OneShots--;
             }
@@ -85,7 +85,7 @@ public class MyPlayerController : MonoBehaviour {
         {
             Debug.Log("Space Pressed");
             actions.Jump();
-            //moveDirection.y = jumpSpeed;
+            moveDirection.y = jumpSpeed;
             
             
         }
